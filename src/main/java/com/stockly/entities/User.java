@@ -5,6 +5,8 @@ import com.stockly.enums.Status;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_users")
@@ -24,6 +26,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
 
     public User() {
     }
@@ -89,6 +94,14 @@ public class User {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override
