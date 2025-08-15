@@ -2,6 +2,7 @@ package com.stockly.services;
 
 import com.stockly.entities.User;
 import com.stockly.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,12 +25,14 @@ public class UserService {
         return repository.findById(id).orElse(null);
     }
 
+    @Transactional
     public User createUser(User user) {
         user.setCreatedAt(LocalDateTime.now());
         repository.save(user);
         return user;
     }
 
+    @Transactional
     public User updateUser(Long id, User obj){
         User user = getUserById(id);
 
@@ -47,6 +50,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public void deleteUserById(Long id) {
         repository.deleteById(id);
     }

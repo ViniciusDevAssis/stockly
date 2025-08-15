@@ -1,7 +1,9 @@
 package com.stockly.services;
 
 import com.stockly.entities.Product;
+import com.stockly.entities.User;
 import com.stockly.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,9 +13,11 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository repository;
+    private final UserService service;
 
-    public ProductService(ProductRepository repository) {
+    public ProductService(ProductRepository repository, UserService service) {
         this.repository = repository;
+        this.service = service;
     }
 
     public List<Product> getAllProducts() {
@@ -24,6 +28,14 @@ public class ProductService {
         return repository.findById(id).orElse(null);
     }
 
+    @Transactional
+    public Product createProduct(Product product, Long id) {
+        product.setUser(service.getUserById(id));
+        product.setCreatedAt(LocalDateTime.now());
+        return repository.save(product);
+    }
+
+    @Transactional
     public Product updateProduct(Long id, Product obj) {
         Product product = getProductById(id);
 
@@ -47,6 +59,7 @@ public class ProductService {
         return product;
     }
 
+    @Transactional
     public void deleteProductById(Long id) {
         repository.deleteById(id);
     }

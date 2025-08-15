@@ -26,7 +26,7 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status  = Status.ACTIVE;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
